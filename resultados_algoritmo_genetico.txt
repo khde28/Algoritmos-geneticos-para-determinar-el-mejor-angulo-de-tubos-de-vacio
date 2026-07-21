@@ -1,0 +1,604 @@
+====================================================================================================
+REPORTE DE EJECUCION - ALGORITMOS GENETICOS PARA ANGULOS DE INCLINACION
+OPTIMOS DE TUBOS AL VACIO DE TERMAS SOLARES EN 6 CIUDADES DEL PERU
+====================================================================================================
+
+Funcion objetivo  : Energia solar recolectable anual por unidad de longitud
+                    de un tubo al vacio (ecuacion 34 de la tesis), en MJ/m.
+Variable de diseno: angulo de inclinacion beta (grados).
+Distancia entre tubos B = 80.0 mm (valor tipico usado en la tesis).
+Diametros de tubo: D1 = 47mm (interior), D2 = 58mm (cobertor).
+
+Parametros del AG (ambas versiones): poblacion=50, generaciones=15,
+prob. cruzamiento=0.7, prob. mutacion=0.1 (segun seccion 3.4.2 de la tesis).
+
+####################################################################################################
+CIUDAD: TRUJILLO
+  Latitud = -8.111777 grados   Longitud = -79.028694 grados   Altitud = 0.034 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  5.4418° | fitness(mejor) =  690.4538 MJ/m | fitness(prom) =  671.5220 MJ/m | fitness(peor) =  618.2395 MJ/m
+  Gen  1 | mejor beta =  5.2476° | fitness(mejor) =  690.4675 MJ/m | fitness(prom) =  686.8702 MJ/m | fitness(peor) =  660.2666 MJ/m
+  Gen  2 | mejor beta =  4.9910° | fitness(mejor) =  690.4745 MJ/m | fitness(prom) =  690.0744 MJ/m | fitness(peor) =  687.7185 MJ/m
+  Gen  3 | mejor beta =  5.0442° | fitness(mejor) =  690.4751 MJ/m | fitness(prom) =  690.2955 MJ/m | fitness(peor) =  688.0876 MJ/m
+  Gen  4 | mejor beta =  4.9419° | fitness(mejor) =  690.4752 MJ/m | fitness(prom) =  690.4374 MJ/m | fitness(peor) =  690.1770 MJ/m
+  Gen  5 | mejor beta =  4.9512° | fitness(mejor) =  690.4748 MJ/m | fitness(prom) =  690.3416 MJ/m | fitness(peor) =  688.3232 MJ/m
+  Gen  6 | mejor beta =  4.9701° | fitness(mejor) =  690.4756 MJ/m | fitness(prom) =  690.3902 MJ/m | fitness(peor) =  688.7507 MJ/m
+  Gen  7 | mejor beta =  4.9701° | fitness(mejor) =  690.4756 MJ/m | fitness(prom) =  690.3426 MJ/m | fitness(peor) =  688.1642 MJ/m
+  Gen  8 | mejor beta =  4.9701° | fitness(mejor) =  690.4756 MJ/m | fitness(prom) =  690.3966 MJ/m | fitness(peor) =  688.4069 MJ/m
+  Gen  9 | mejor beta =  4.9691° | fitness(mejor) =  690.4755 MJ/m | fitness(prom) =  690.2347 MJ/m | fitness(peor) =  684.6951 MJ/m
+  Gen 10 | mejor beta =  4.9548° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.3799 MJ/m | fitness(peor) =  688.2517 MJ/m
+  Gen 11 | mejor beta =  4.9607° | fitness(mejor) =  690.4756 MJ/m | fitness(prom) =  690.3542 MJ/m | fitness(peor) =  688.0040 MJ/m
+  Gen 12 | mejor beta =  4.9689° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.3468 MJ/m | fitness(peor) =  688.5442 MJ/m
+  Gen 13 | mejor beta =  4.9689° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.4015 MJ/m | fitness(peor) =  688.1865 MJ/m
+  Gen 14 | mejor beta =  4.9689° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.3847 MJ/m | fitness(peor) =  688.2044 MJ/m
+  Gen 15 | mejor beta =  4.9689° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.3521 MJ/m | fitness(peor) =  686.7210 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 4.9548 grados  | energia anual (precision completa) = 689.72 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  5.4418° | fitness(mejor) =  690.4538 MJ/m | fitness(prom) =  671.5220 MJ/m | fitness(peor) =  618.2395 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta =  5.2476° | fitness(mejor) =  690.4675 MJ/m | fitness(prom) =  688.0757 MJ/m | fitness(peor) =  665.1341 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta =  5.1333° | fitness(mejor) =  690.4717 MJ/m | fitness(prom) =  690.1825 MJ/m | fitness(peor) =  689.0152 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta =  5.0442° | fitness(mejor) =  690.4751 MJ/m | fitness(prom) =  690.4033 MJ/m | fitness(peor) =  690.0234 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta =  4.9365° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.4654 MJ/m | fitness(peor) =  690.4082 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta =  4.9365° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.4468 MJ/m | fitness(peor) =  689.8952 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta =  4.9365° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.4672 MJ/m | fitness(peor) =  690.1100 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta =  4.9365° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.4559 MJ/m | fitness(peor) =  690.1638 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta =  4.9365° | fitness(mejor) =  690.4757 MJ/m | fitness(prom) =  690.4748 MJ/m | fitness(peor) =  690.4732 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta =  4.9687° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.4552 MJ/m | fitness(peor) =  689.8459 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta =  4.9687° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.4700 MJ/m | fitness(peor) =  690.3187 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta =  4.9687° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.4716 MJ/m | fitness(peor) =  690.3814 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta =  4.9687° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.4700 MJ/m | fitness(peor) =  690.4015 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta =  4.9687° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.4750 MJ/m | fitness(peor) =  690.4514 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta =  4.9687° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.4757 MJ/m | fitness(peor) =  690.4652 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta =  4.9687° | fitness(mejor) =  690.4761 MJ/m | fitness(prom) =  690.4755 MJ/m | fitness(peor) =  690.4548 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 4.9687 grados  | energia anual (precision completa) = 689.72 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 4.9000 grados  |  energia anual = 689.72 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 5.62 grados  (energia anual tesis: 718.82 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 4.95 grados  (diferencia = -0.67 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 4.97 grados  (diferencia = -0.65 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 38.5 s
+
+####################################################################################################
+CIUDAD: TACNA
+  Latitud = -18.013771 grados   Longitud = -70.251085 grados   Altitud = 0.552 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta = 11.7808° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  676.2496 MJ/m | fitness(peor) =  643.8882 MJ/m
+  Gen  1 | mejor beta = 11.7390° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  683.1300 MJ/m | fitness(peor) =  672.4842 MJ/m
+  Gen  2 | mejor beta = 11.5913° | fitness(mejor) =  686.6728 MJ/m | fitness(prom) =  686.0416 MJ/m | fitness(peor) =  680.5243 MJ/m
+  Gen  3 | mejor beta = 11.6537° | fitness(mejor) =  686.6736 MJ/m | fitness(prom) =  686.5424 MJ/m | fitness(peor) =  684.2924 MJ/m
+  Gen  4 | mejor beta = 11.6435° | fitness(mejor) =  686.6749 MJ/m | fitness(prom) =  686.6526 MJ/m | fitness(peor) =  686.4462 MJ/m
+  Gen  5 | mejor beta = 11.7196° | fitness(mejor) =  686.6772 MJ/m | fitness(prom) =  686.5520 MJ/m | fitness(peor) =  684.6526 MJ/m
+  Gen  6 | mejor beta = 11.6691° | fitness(mejor) =  686.6764 MJ/m | fitness(prom) =  686.5881 MJ/m | fitness(peor) =  684.9175 MJ/m
+  Gen  7 | mejor beta = 11.6424° | fitness(mejor) =  686.6771 MJ/m | fitness(prom) =  686.5498 MJ/m | fitness(peor) =  684.4649 MJ/m
+  Gen  8 | mejor beta = 11.6424° | fitness(mejor) =  686.6771 MJ/m | fitness(prom) =  686.6015 MJ/m | fitness(peor) =  684.6802 MJ/m
+  Gen  9 | mejor beta = 11.6617° | fitness(mejor) =  686.6768 MJ/m | fitness(prom) =  686.4164 MJ/m | fitness(peor) =  681.0501 MJ/m
+  Gen 10 | mejor beta = 11.6617° | fitness(mejor) =  686.6768 MJ/m | fitness(prom) =  686.5848 MJ/m | fitness(peor) =  684.5661 MJ/m
+  Gen 11 | mejor beta = 11.6617° | fitness(mejor) =  686.6768 MJ/m | fitness(prom) =  686.5559 MJ/m | fitness(peor) =  684.2887 MJ/m
+  Gen 12 | mejor beta = 11.6617° | fitness(mejor) =  686.6768 MJ/m | fitness(prom) =  686.5556 MJ/m | fitness(peor) =  684.8746 MJ/m
+  Gen 13 | mejor beta = 11.7514° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6046 MJ/m | fitness(peor) =  684.3942 MJ/m
+  Gen 14 | mejor beta = 11.7514° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.5905 MJ/m | fitness(peor) =  684.4836 MJ/m
+  Gen 15 | mejor beta = 11.7481° | fitness(mejor) =  686.6774 MJ/m | fitness(prom) =  686.5565 MJ/m | fitness(peor) =  683.0586 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 11.7481 grados  | energia anual (precision completa) = 685.19 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta = 11.7808° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  676.2496 MJ/m | fitness(peor) =  643.8882 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta = 11.7808° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  683.6792 MJ/m | fitness(peor) =  674.2183 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta = 11.7808° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  686.4775 MJ/m | fitness(peor) =  684.8426 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta = 11.7808° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  686.6544 MJ/m | fitness(peor) =  686.4191 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta = 11.7808° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  686.6716 MJ/m | fitness(peor) =  686.6053 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta = 11.7808° | fitness(mejor) =  686.6761 MJ/m | fitness(prom) =  686.6505 MJ/m | fitness(peor) =  686.1462 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6683 MJ/m | fitness(peor) =  686.3229 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6570 MJ/m | fitness(peor) =  686.3572 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6754 MJ/m | fitness(peor) =  686.6715 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6576 MJ/m | fitness(peor) =  686.1651 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6707 MJ/m | fitness(peor) =  686.5598 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6710 MJ/m | fitness(peor) =  686.5671 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6704 MJ/m | fitness(peor) =  686.5953 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6762 MJ/m | fitness(peor) =  686.6569 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6763 MJ/m | fitness(peor) =  686.6641 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta = 11.7744° | fitness(mejor) =  686.6766 MJ/m | fitness(prom) =  686.6759 MJ/m | fitness(peor) =  686.6495 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 11.7744 grados  | energia anual (precision completa) = 685.19 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 11.6500 grados  |  energia anual = 685.18 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 13.64 grados  (energia anual tesis: 719.45 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 11.75 grados  (diferencia = -1.89 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 11.77 grados  (diferencia = -1.87 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 38.8 s
+
+####################################################################################################
+CIUDAD: AREQUIPA
+  Latitud = -16.415456 grados   Longitud = -71.521864 grados   Altitud = 2.335 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta = 11.7808° | fitness(mejor) =  748.2310 MJ/m | fitness(prom) =  736.3105 MJ/m | fitness(peor) =  698.8880 MJ/m
+  Gen  1 | mejor beta = 11.3090° | fitness(mejor) =  748.2485 MJ/m | fitness(prom) =  744.4999 MJ/m | fitness(peor) =  733.5732 MJ/m
+  Gen  2 | mejor beta = 11.3090° | fitness(mejor) =  748.2485 MJ/m | fitness(prom) =  747.6227 MJ/m | fitness(peor) =  741.9474 MJ/m
+  Gen  3 | mejor beta = 11.4340° | fitness(mejor) =  748.2529 MJ/m | fitness(prom) =  748.1283 MJ/m | fitness(peor) =  745.9791 MJ/m
+  Gen  4 | mejor beta = 11.4340° | fitness(mejor) =  748.2529 MJ/m | fitness(prom) =  748.2167 MJ/m | fitness(peor) =  747.8722 MJ/m
+  Gen  5 | mejor beta = 11.2027° | fitness(mejor) =  748.2541 MJ/m | fitness(prom) =  748.1116 MJ/m | fitness(peor) =  746.1071 MJ/m
+  Gen  6 | mejor beta = 11.2953° | fitness(mejor) =  748.2552 MJ/m | fitness(prom) =  748.1546 MJ/m | fitness(peor) =  746.3702 MJ/m
+  Gen  7 | mejor beta = 11.2953° | fitness(mejor) =  748.2552 MJ/m | fitness(prom) =  748.1158 MJ/m | fitness(peor) =  745.9159 MJ/m
+  Gen  8 | mejor beta = 11.2953° | fitness(mejor) =  748.2552 MJ/m | fitness(prom) =  748.1677 MJ/m | fitness(peor) =  746.0339 MJ/m
+  Gen  9 | mejor beta = 11.3431° | fitness(mejor) =  748.2537 MJ/m | fitness(prom) =  747.9560 MJ/m | fitness(peor) =  741.6137 MJ/m
+  Gen 10 | mejor beta = 11.3439° | fitness(mejor) =  748.2549 MJ/m | fitness(prom) =  748.1493 MJ/m | fitness(peor) =  745.7925 MJ/m
+  Gen 11 | mejor beta = 11.3274° | fitness(mejor) =  748.2541 MJ/m | fitness(prom) =  748.1211 MJ/m | fitness(peor) =  745.6191 MJ/m
+  Gen 12 | mejor beta = 11.3413° | fitness(mejor) =  748.2551 MJ/m | fitness(prom) =  748.1209 MJ/m | fitness(peor) =  746.3451 MJ/m
+  Gen 13 | mejor beta = 11.3413° | fitness(mejor) =  748.2551 MJ/m | fitness(prom) =  748.1757 MJ/m | fitness(peor) =  745.7867 MJ/m
+  Gen 14 | mejor beta = 11.3413° | fitness(mejor) =  748.2551 MJ/m | fitness(prom) =  748.1607 MJ/m | fitness(peor) =  745.9355 MJ/m
+  Gen 15 | mejor beta = 11.3413° | fitness(mejor) =  748.2551 MJ/m | fitness(prom) =  748.1180 MJ/m | fitness(peor) =  744.1474 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 11.2953 grados  | energia anual (precision completa) = 746.82 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta = 11.7808° | fitness(mejor) =  748.2310 MJ/m | fitness(prom) =  736.3105 MJ/m | fitness(peor) =  698.8880 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta = 11.6405° | fitness(mejor) =  748.2390 MJ/m | fitness(prom) =  745.0724 MJ/m | fitness(peor) =  735.0969 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta = 11.4076° | fitness(mejor) =  748.2484 MJ/m | fitness(prom) =  748.0470 MJ/m | fitness(peor) =  747.1561 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta = 11.3804° | fitness(mejor) =  748.2553 MJ/m | fitness(prom) =  748.2165 MJ/m | fitness(peor) =  748.0486 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2367 MJ/m | fitness(peor) =  748.1334 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2205 MJ/m | fitness(peor) =  747.7110 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2410 MJ/m | fitness(peor) =  747.8716 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2311 MJ/m | fitness(peor) =  747.9010 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2497 MJ/m | fitness(peor) =  748.2440 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2309 MJ/m | fitness(peor) =  747.6533 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2456 MJ/m | fitness(peor) =  748.1055 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2478 MJ/m | fitness(peor) =  748.1355 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2475 MJ/m | fitness(peor) =  748.1710 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2536 MJ/m | fitness(peor) =  748.2226 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2547 MJ/m | fitness(peor) =  748.2381 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta = 11.3628° | fitness(mejor) =  748.2554 MJ/m | fitness(prom) =  748.2544 MJ/m | fitness(peor) =  748.2292 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 11.3628 grados  | energia anual (precision completa) = 746.82 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 11.4000 grados  |  energia anual = 746.82 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 12.66 grados  (energia anual tesis: 793.56 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 11.30 grados  (diferencia = -1.36 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 11.36 grados  (diferencia = -1.30 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 41.1 s
+
+####################################################################################################
+CIUDAD: PIURA
+  Latitud = -5.197195 grados   Longitud = -80.626649 grados   Altitud = 0.055 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  3.2461° | fitness(mejor) =  696.2842 MJ/m | fitness(prom) =  673.3068 MJ/m | fitness(peor) =  613.5702 MJ/m
+  Gen  1 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  691.7251 MJ/m | fitness(peor) =  659.3459 MJ/m
+  Gen  2 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  695.9197 MJ/m | fitness(peor) =  691.3266 MJ/m
+  Gen  3 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2212 MJ/m | fitness(peor) =  695.2808 MJ/m
+  Gen  4 | mejor beta =  3.1997° | fitness(mejor) =  696.2851 MJ/m | fitness(prom) =  696.2701 MJ/m | fitness(peor) =  695.9863 MJ/m
+  Gen  5 | mejor beta =  3.1998° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.1720 MJ/m | fitness(peor) =  694.2083 MJ/m
+  Gen  6 | mejor beta =  3.2193° | fitness(mejor) =  696.2852 MJ/m | fitness(prom) =  696.1962 MJ/m | fitness(peor) =  694.5138 MJ/m
+  Gen  7 | mejor beta =  3.2463° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.1614 MJ/m | fitness(peor) =  693.8299 MJ/m
+  Gen  8 | mejor beta =  3.2463° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.2194 MJ/m | fitness(peor) =  694.0268 MJ/m
+  Gen  9 | mejor beta =  3.2365° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.0912 MJ/m | fitness(peor) =  690.2083 MJ/m
+  Gen 10 | mejor beta =  3.2365° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.1840 MJ/m | fitness(peor) =  693.9080 MJ/m
+  Gen 11 | mejor beta =  3.2365° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.1840 MJ/m | fitness(peor) =  693.6699 MJ/m
+  Gen 12 | mejor beta =  3.2365° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.1885 MJ/m | fitness(peor) =  695.2808 MJ/m
+  Gen 13 | mejor beta =  3.2365° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.2096 MJ/m | fitness(peor) =  693.8403 MJ/m
+  Gen 14 | mejor beta =  3.2397° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.2363 MJ/m | fitness(peor) =  695.2808 MJ/m
+  Gen 15 | mejor beta =  3.2397° | fitness(mejor) =  696.2853 MJ/m | fitness(prom) =  696.1532 MJ/m | fitness(peor) =  692.3117 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 3.2465 grados  | energia anual (precision completa) = 695.77 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  3.2461° | fitness(mejor) =  696.2842 MJ/m | fitness(prom) =  673.3068 MJ/m | fitness(peor) =  613.5702 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  693.1968 MJ/m | fitness(peor) =  664.7736 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.0876 MJ/m | fitness(peor) =  694.6551 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2741 MJ/m | fitness(peor) =  696.1644 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2825 MJ/m | fitness(peor) =  696.2054 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2581 MJ/m | fitness(peor) =  695.7238 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2771 MJ/m | fitness(peor) =  695.8902 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2641 MJ/m | fitness(peor) =  695.9273 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2854 MJ/m | fitness(peor) =  696.2854 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2652 MJ/m | fitness(peor) =  695.6908 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2800 MJ/m | fitness(peor) =  696.1260 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2807 MJ/m | fitness(peor) =  696.1623 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2786 MJ/m | fitness(peor) =  696.1946 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2847 MJ/m | fitness(peor) =  696.2556 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2850 MJ/m | fitness(peor) =  696.2714 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta =  3.2465° | fitness(mejor) =  696.2854 MJ/m | fitness(prom) =  696.2846 MJ/m | fitness(peor) =  696.2561 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 3.2465 grados  | energia anual (precision completa) = 695.77 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 3.2500 grados  |  energia anual = 695.77 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 3.99 grados  (energia anual tesis: 725.11 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 3.25 grados  (diferencia = -0.74 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 3.25 grados  (diferencia = -0.74 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 35.7 s
+
+####################################################################################################
+CIUDAD: PUNO
+  Latitud = -15.840582 grados   Longitud = -70.027907 grados   Altitud = 3.827 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta = 11.7808° | fitness(mejor) =  756.6117 MJ/m | fitness(prom) =  744.2903 MJ/m | fitness(peor) =  705.2467 MJ/m
+  Gen  1 | mejor beta = 11.0231° | fitness(mejor) =  756.6677 MJ/m | fitness(prom) =  752.7357 MJ/m | fitness(peor) =  741.0177 MJ/m
+  Gen  2 | mejor beta = 11.1095° | fitness(mejor) =  756.6705 MJ/m | fitness(prom) =  756.0880 MJ/m | fitness(peor) =  750.7688 MJ/m
+  Gen  3 | mejor beta = 11.1095° | fitness(mejor) =  756.6705 MJ/m | fitness(prom) =  756.5765 MJ/m | fitness(peor) =  755.1925 MJ/m
+  Gen  4 | mejor beta = 11.1095° | fitness(mejor) =  756.6705 MJ/m | fitness(prom) =  756.6392 MJ/m | fitness(peor) =  756.4502 MJ/m
+  Gen  5 | mejor beta = 11.1095° | fitness(mejor) =  756.6705 MJ/m | fitness(prom) =  756.5302 MJ/m | fitness(peor) =  754.4868 MJ/m
+  Gen  6 | mejor beta = 11.0388° | fitness(mejor) =  756.6717 MJ/m | fitness(prom) =  756.5747 MJ/m | fitness(peor) =  754.7984 MJ/m
+  Gen  7 | mejor beta = 11.0388° | fitness(mejor) =  756.6717 MJ/m | fitness(prom) =  756.5282 MJ/m | fitness(peor) =  754.2314 MJ/m
+  Gen  8 | mejor beta = 11.0418° | fitness(mejor) =  756.6718 MJ/m | fitness(prom) =  756.5815 MJ/m | fitness(peor) =  754.2956 MJ/m
+  Gen  9 | mejor beta = 11.0543° | fitness(mejor) =  756.6742 MJ/m | fitness(prom) =  756.3745 MJ/m | fitness(peor) =  750.2155 MJ/m
+  Gen 10 | mejor beta = 11.0584° | fitness(mejor) =  756.6736 MJ/m | fitness(prom) =  756.5653 MJ/m | fitness(peor) =  754.2348 MJ/m
+  Gen 11 | mejor beta = 11.0584° | fitness(mejor) =  756.6736 MJ/m | fitness(prom) =  756.5349 MJ/m | fitness(peor) =  753.9510 MJ/m
+  Gen 12 | mejor beta = 11.0584° | fitness(mejor) =  756.6736 MJ/m | fitness(prom) =  756.5337 MJ/m | fitness(peor) =  754.6977 MJ/m
+  Gen 13 | mejor beta = 11.1300° | fitness(mejor) =  756.6738 MJ/m | fitness(prom) =  756.5911 MJ/m | fitness(peor) =  754.1508 MJ/m
+  Gen 14 | mejor beta = 11.1300° | fitness(mejor) =  756.6738 MJ/m | fitness(prom) =  756.5766 MJ/m | fitness(peor) =  754.3537 MJ/m
+  Gen 15 | mejor beta = 11.1300° | fitness(mejor) =  756.6738 MJ/m | fitness(prom) =  756.5298 MJ/m | fitness(peor) =  752.4022 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 11.0543 grados  | energia anual (precision completa) = 755.28 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta = 11.7808° | fitness(mejor) =  756.6117 MJ/m | fitness(prom) =  744.2903 MJ/m | fitness(peor) =  705.2467 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta = 11.0231° | fitness(mejor) =  756.6677 MJ/m | fitness(prom) =  753.3149 MJ/m | fitness(peor) =  744.0349 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta = 11.1139° | fitness(mejor) =  756.6683 MJ/m | fitness(prom) =  756.4574 MJ/m | fitness(peor) =  755.4609 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta = 10.9068° | fitness(mejor) =  756.6734 MJ/m | fitness(prom) =  756.6279 MJ/m | fitness(peor) =  756.3711 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta = 10.9068° | fitness(mejor) =  756.6734 MJ/m | fitness(prom) =  756.6568 MJ/m | fitness(peor) =  756.5813 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta = 10.9068° | fitness(mejor) =  756.6734 MJ/m | fitness(prom) =  756.6413 MJ/m | fitness(peor) =  756.1966 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta = 10.9068° | fitness(mejor) =  756.6734 MJ/m | fitness(prom) =  756.6581 MJ/m | fitness(peor) =  756.2777 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta = 10.9068° | fitness(mejor) =  756.6734 MJ/m | fitness(prom) =  756.6468 MJ/m | fitness(peor) =  756.3553 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta = 10.9068° | fitness(mejor) =  756.6734 MJ/m | fitness(prom) =  756.6659 MJ/m | fitness(peor) =  756.6556 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta = 10.9782° | fitness(mejor) =  756.6748 MJ/m | fitness(prom) =  756.6455 MJ/m | fitness(peor) =  756.0140 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta = 10.9782° | fitness(mejor) =  756.6748 MJ/m | fitness(prom) =  756.6619 MJ/m | fitness(peor) =  756.5399 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta = 10.9782° | fitness(mejor) =  756.6748 MJ/m | fitness(prom) =  756.6658 MJ/m | fitness(peor) =  756.6230 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta = 10.9782° | fitness(mejor) =  756.6748 MJ/m | fitness(prom) =  756.6638 MJ/m | fitness(peor) =  756.5797 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta = 10.9782° | fitness(mejor) =  756.6748 MJ/m | fitness(prom) =  756.6682 MJ/m | fitness(peor) =  756.6291 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta = 10.9782° | fitness(mejor) =  756.6748 MJ/m | fitness(prom) =  756.6711 MJ/m | fitness(peor) =  756.6442 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta = 10.9782° | fitness(mejor) =  756.6748 MJ/m | fitness(prom) =  756.6737 MJ/m | fitness(peor) =  756.6524 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 10.9782 grados  | energia anual (precision completa) = 755.27 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 10.9500 grados  |  energia anual = 755.27 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 12.22 grados  (energia anual tesis: 804.70 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 11.05 grados  (diferencia = -1.17 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 10.98 grados  (diferencia = -1.24 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 38.5 s
+
+####################################################################################################
+CIUDAD: IQUITOS
+  Latitud = -3.749315 grados   Longitud = -73.244439 grados   Altitud = 0.106 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  2.7927° | fitness(mejor) =  700.7031 MJ/m | fitness(prom) =  675.4125 MJ/m | fitness(peor) =  612.2208 MJ/m
+  Gen  1 | mejor beta =  2.5701° | fitness(mejor) =  700.7168 MJ/m | fitness(prom) =  695.4871 MJ/m | fitness(peor) =  660.0554 MJ/m
+  Gen  2 | mejor beta =  2.5098° | fitness(mejor) =  700.7176 MJ/m | fitness(prom) =  700.3565 MJ/m | fitness(peor) =  694.4178 MJ/m
+  Gen  3 | mejor beta =  2.5425° | fitness(mejor) =  700.7178 MJ/m | fitness(prom) =  700.6782 MJ/m | fitness(peor) =  700.1878 MJ/m
+  Gen  4 | mejor beta =  2.4958° | fitness(mejor) =  700.7181 MJ/m | fitness(prom) =  700.6971 MJ/m | fitness(peor) =  700.3715 MJ/m
+  Gen  5 | mejor beta =  2.4429° | fitness(mejor) =  700.7181 MJ/m | fitness(prom) =  700.6141 MJ/m | fitness(peor) =  698.4148 MJ/m
+  Gen  6 | mejor beta =  2.4524° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6294 MJ/m | fitness(peor) =  698.7171 MJ/m
+  Gen  7 | mejor beta =  2.4976° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.5948 MJ/m | fitness(peor) =  698.1048 MJ/m
+  Gen  8 | mejor beta =  2.4725° | fitness(mejor) =  700.7186 MJ/m | fitness(prom) =  700.6589 MJ/m | fitness(peor) =  698.2933 MJ/m
+  Gen  9 | mejor beta =  2.4725° | fitness(mejor) =  700.7186 MJ/m | fitness(prom) =  700.5363 MJ/m | fitness(peor) =  694.3352 MJ/m
+  Gen 10 | mejor beta =  2.4725° | fitness(mejor) =  700.7186 MJ/m | fitness(prom) =  700.6168 MJ/m | fitness(peor) =  698.2033 MJ/m
+  Gen 11 | mejor beta =  2.4719° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6193 MJ/m | fitness(peor) =  697.8941 MJ/m
+  Gen 12 | mejor beta =  2.4687° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6398 MJ/m | fitness(peor) =  699.8904 MJ/m
+  Gen 13 | mejor beta =  2.4687° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6477 MJ/m | fitness(peor) =  698.1077 MJ/m
+  Gen 14 | mejor beta =  2.4723° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6898 MJ/m | fitness(peor) =  700.1878 MJ/m
+  Gen 15 | mejor beta =  2.4723° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.5779 MJ/m | fitness(peor) =  696.5208 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 2.4725 grados  | energia anual (precision completa) = 700.33 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  2.7927° | fitness(mejor) =  700.7031 MJ/m | fitness(prom) =  675.4125 MJ/m | fitness(peor) =  612.2208 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta =  2.5701° | fitness(mejor) =  700.7168 MJ/m | fitness(prom) =  697.1054 MJ/m | fitness(peor) =  665.7761 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta =  2.4802° | fitness(mejor) =  700.7179 MJ/m | fitness(prom) =  700.5601 MJ/m | fitness(peor) =  698.3066 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta =  2.4802° | fitness(mejor) =  700.7179 MJ/m | fitness(prom) =  700.7083 MJ/m | fitness(peor) =  700.6379 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta =  2.4607° | fitness(mejor) =  700.7182 MJ/m | fitness(prom) =  700.7137 MJ/m | fitness(peor) =  700.6393 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta =  2.4939° | fitness(mejor) =  700.7182 MJ/m | fitness(prom) =  700.6916 MJ/m | fitness(peor) =  700.1878 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta =  2.4663° | fitness(mejor) =  700.7183 MJ/m | fitness(prom) =  700.7105 MJ/m | fitness(peor) =  700.3495 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta =  2.4433° | fitness(mejor) =  700.7183 MJ/m | fitness(prom) =  700.6943 MJ/m | fitness(peor) =  700.3201 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta =  2.4433° | fitness(mejor) =  700.7183 MJ/m | fitness(prom) =  700.7179 MJ/m | fitness(peor) =  700.7173 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.6988 MJ/m | fitness(peor) =  700.1980 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7131 MJ/m | fitness(peor) =  700.5905 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7128 MJ/m | fitness(peor) =  700.5779 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7113 MJ/m | fitness(peor) =  700.6152 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7175 MJ/m | fitness(peor) =  700.6982 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7180 MJ/m | fitness(peor) =  700.7100 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7176 MJ/m | fitness(peor) =  700.6853 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 2.4804 grados  | energia anual (precision completa) = 700.33 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 2.4500 grados  |  energia anual = 700.33 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 2.87 grados  (energia anual tesis: 730.23 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 2.47 grados  (diferencia = -0.40 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 2.48 grados  (diferencia = -0.39 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 44.8 s
+
+
+====================================================================================================
+TABLA RESUMEN FINAL - COMPARACION DE LOS 3 METODOS Y LA TESIS
+====================================================================================================
+CIUDAD      Beta Tesis  Beta AG-Orig  Beta AG-Mejor  Beta Fzabruta  Energ.Orig(MJ/m)  Energ.Mejor(MJ/m)
+-------------------------------------------------------------------------------------------------------
+TRUJILLO          5.62        4.9548         4.9687         4.9000            689.72             689.72
+TACNA            13.64       11.7481        11.7744        11.6500            685.19             685.19
+AREQUIPA         12.66       11.2953        11.3628        11.4000            746.82             746.82
+PIURA             3.99        3.2465         3.2465         3.2500            695.77             695.77
+PUNO             12.22       11.0543        10.9782        10.9500            755.28             755.27
+IQUITOS           2.87        2.4725         2.4804         2.4500            700.33             700.33
+
+Fin del reporte.
+####################################################################################################
+CIUDAD: IQUITOS
+  Latitud = -3.749315 grados   Longitud = -73.244439 grados   Altitud = 0.106 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  2.7927° | fitness(mejor) =  700.7031 MJ/m | fitness(prom) =  675.4125 MJ/m | fitness(peor) =  612.2208 MJ/m
+  Gen  1 | mejor beta =  2.5701° | fitness(mejor) =  700.7168 MJ/m | fitness(prom) =  695.4871 MJ/m | fitness(peor) =  660.0554 MJ/m
+  Gen  2 | mejor beta =  2.5098° | fitness(mejor) =  700.7176 MJ/m | fitness(prom) =  700.3565 MJ/m | fitness(peor) =  694.4178 MJ/m
+  Gen  3 | mejor beta =  2.5425° | fitness(mejor) =  700.7178 MJ/m | fitness(prom) =  700.6782 MJ/m | fitness(peor) =  700.1878 MJ/m
+  Gen  4 | mejor beta =  2.4958° | fitness(mejor) =  700.7181 MJ/m | fitness(prom) =  700.6971 MJ/m | fitness(peor) =  700.3715 MJ/m
+  Gen  5 | mejor beta =  2.4429° | fitness(mejor) =  700.7181 MJ/m | fitness(prom) =  700.6141 MJ/m | fitness(peor) =  698.4148 MJ/m
+  Gen  6 | mejor beta =  2.4524° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6294 MJ/m | fitness(peor) =  698.7171 MJ/m
+  Gen  7 | mejor beta =  2.4976° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.5948 MJ/m | fitness(peor) =  698.1048 MJ/m
+  Gen  8 | mejor beta =  2.4725° | fitness(mejor) =  700.7186 MJ/m | fitness(prom) =  700.6589 MJ/m | fitness(peor) =  698.2933 MJ/m
+  Gen  9 | mejor beta =  2.4725° | fitness(mejor) =  700.7186 MJ/m | fitness(prom) =  700.5363 MJ/m | fitness(peor) =  694.3352 MJ/m
+  Gen 10 | mejor beta =  2.4725° | fitness(mejor) =  700.7186 MJ/m | fitness(prom) =  700.6168 MJ/m | fitness(peor) =  698.2033 MJ/m
+  Gen 11 | mejor beta =  2.4719° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6193 MJ/m | fitness(peor) =  697.8941 MJ/m
+  Gen 12 | mejor beta =  2.4687° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6398 MJ/m | fitness(peor) =  699.8904 MJ/m
+  Gen 13 | mejor beta =  2.4687° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6477 MJ/m | fitness(peor) =  698.1077 MJ/m
+  Gen 14 | mejor beta =  2.4723° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.6898 MJ/m | fitness(peor) =  700.1878 MJ/m
+  Gen 15 | mejor beta =  2.4723° | fitness(mejor) =  700.7185 MJ/m | fitness(prom) =  700.5779 MJ/m | fitness(peor) =  696.5208 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 2.4725 grados  | energia anual (precision completa) = 700.33 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  2.7927° | fitness(mejor) =  700.7031 MJ/m | fitness(prom) =  675.4125 MJ/m | fitness(peor) =  612.2208 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta =  2.5701° | fitness(mejor) =  700.7168 MJ/m | fitness(prom) =  697.1054 MJ/m | fitness(peor) =  665.7761 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta =  2.4802° | fitness(mejor) =  700.7179 MJ/m | fitness(prom) =  700.5601 MJ/m | fitness(peor) =  698.3066 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta =  2.4802° | fitness(mejor) =  700.7179 MJ/m | fitness(prom) =  700.7083 MJ/m | fitness(peor) =  700.6379 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta =  2.4607° | fitness(mejor) =  700.7182 MJ/m | fitness(prom) =  700.7137 MJ/m | fitness(peor) =  700.6393 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta =  2.4939° | fitness(mejor) =  700.7182 MJ/m | fitness(prom) =  700.6916 MJ/m | fitness(peor) =  700.1878 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta =  2.4663° | fitness(mejor) =  700.7183 MJ/m | fitness(prom) =  700.7105 MJ/m | fitness(peor) =  700.3495 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta =  2.4433° | fitness(mejor) =  700.7183 MJ/m | fitness(prom) =  700.6943 MJ/m | fitness(peor) =  700.3201 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta =  2.4433° | fitness(mejor) =  700.7183 MJ/m | fitness(prom) =  700.7179 MJ/m | fitness(peor) =  700.7173 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.6988 MJ/m | fitness(peor) =  700.1980 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7131 MJ/m | fitness(peor) =  700.5905 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7128 MJ/m | fitness(peor) =  700.5779 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7113 MJ/m | fitness(peor) =  700.6152 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7175 MJ/m | fitness(peor) =  700.6982 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7180 MJ/m | fitness(peor) =  700.7100 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta =  2.4804° | fitness(mejor) =  700.7184 MJ/m | fitness(prom) =  700.7176 MJ/m | fitness(peor) =  700.6853 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 2.4804 grados  | energia anual (precision completa) = 700.33 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 2.4500 grados  |  energia anual = 700.33 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 2.87 grados  (energia anual tesis: 730.23 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 2.47 grados  (diferencia = -0.40 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 2.48 grados  (diferencia = -0.39 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 42.3 s
+
+####################################################################################################
+CIUDAD: PIURA
+  Latitud = -5.197195 grados   Longitud = -80.626649 grados   Altitud = 0.055 km
+  Rango de busqueda de beta: [0.0, 35.0] grados
+####################################################################################################
+
+----------------------------------------------------------------------------------------------------
+A) ALGORITMO GENETICO ORIGINAL (replica de la metodologia de la tesis)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  3.2461° | fitness(mejor) =  700.5919 MJ/m | fitness(prom) =  677.4513 MJ/m | fitness(peor) =  617.2573 MJ/m
+  Gen  1 | mejor beta =  3.2465° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  696.0023 MJ/m | fitness(peor) =  663.3921 MJ/m
+  Gen  2 | mejor beta =  3.2465° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.2236 MJ/m | fitness(peor) =  695.6098 MJ/m
+  Gen  3 | mejor beta =  3.2465° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.5274 MJ/m | fitness(peor) =  699.5717 MJ/m
+  Gen  4 | mejor beta =  3.2190° | fitness(mejor) =  700.5927 MJ/m | fitness(prom) =  700.5776 MJ/m | fitness(peor) =  700.2954 MJ/m
+  Gen  5 | mejor beta =  3.1998° | fitness(mejor) =  700.5928 MJ/m | fitness(prom) =  700.4788 MJ/m | fitness(peor) =  698.5094 MJ/m
+  Gen  6 | mejor beta =  3.2534° | fitness(mejor) =  700.5928 MJ/m | fitness(prom) =  700.5033 MJ/m | fitness(peor) =  698.8167 MJ/m
+  Gen  7 | mejor beta =  3.2534° | fitness(mejor) =  700.5928 MJ/m | fitness(prom) =  700.4675 MJ/m | fitness(peor) =  698.1031 MJ/m
+  Gen  8 | mejor beta =  3.2127° | fitness(mejor) =  700.5928 MJ/m | fitness(prom) =  700.5266 MJ/m | fitness(peor) =  698.3269 MJ/m
+  Gen  9 | mejor beta =  3.2497° | fitness(mejor) =  700.5929 MJ/m | fitness(prom) =  700.3966 MJ/m | fitness(peor) =  694.4389 MJ/m
+  Gen 10 | mejor beta =  3.2497° | fitness(mejor) =  700.5929 MJ/m | fitness(prom) =  700.4913 MJ/m | fitness(peor) =  698.2246 MJ/m
+  Gen 11 | mejor beta =  3.2497° | fitness(mejor) =  700.5929 MJ/m | fitness(prom) =  700.4898 MJ/m | fitness(peor) =  697.9200 MJ/m
+  Gen 12 | mejor beta =  3.2497° | fitness(mejor) =  700.5929 MJ/m | fitness(prom) =  700.4949 MJ/m | fitness(peor) =  699.5717 MJ/m
+  Gen 13 | mejor beta =  3.2434° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.5161 MJ/m | fitness(peor) =  698.1150 MJ/m
+  Gen 14 | mejor beta =  3.2434° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.5429 MJ/m | fitness(peor) =  699.5717 MJ/m
+  Gen 15 | mejor beta =  3.2506° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.4595 MJ/m | fitness(peor) =  696.5840 MJ/m
+
+  >>> RESULTADO AG ORIGINAL: beta optimo = 3.2506 grados  | energia anual (precision completa) = 700.07 MJ/m
+
+----------------------------------------------------------------------------------------------------
+B) ALGORITMO GENETICO MEJORADO (elitismo + mutacion adaptativa +
+   refinamiento memetico con Busqueda de la Seccion Aurea)
+----------------------------------------------------------------------------------------------------
+  Gen  0 | mejor beta =  3.2461° | fitness(mejor) =  700.5919 MJ/m | fitness(prom) =  677.4513 MJ/m | fitness(peor) =  617.2573 MJ/m | sigma = 3.5000
+  Gen  1 | mejor beta =  3.2465° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  697.4845 MJ/m | fitness(peor) =  668.8615 MJ/m | sigma = 3.3017
+  Gen  2 | mejor beta =  3.2465° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.3926 MJ/m | fitness(peor) =  698.9587 MJ/m | sigma = 3.1033
+  Gen  3 | mejor beta =  3.2465° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.5815 MJ/m | fitness(peor) =  700.4735 MJ/m | sigma = 2.9050
+  Gen  4 | mejor beta =  3.2461° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.5903 MJ/m | fitness(peor) =  700.5144 MJ/m | sigma = 2.7067
+  Gen  5 | mejor beta =  3.2461° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.5657 MJ/m | fitness(peor) =  700.0318 MJ/m | sigma = 2.5083
+  Gen  6 | mejor beta =  3.2461° | fitness(mejor) =  700.5931 MJ/m | fitness(prom) =  700.5847 MJ/m | fitness(peor) =  700.1988 MJ/m | sigma = 2.3100
+  Gen  7 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5716 MJ/m | fitness(peor) =  700.2364 MJ/m | sigma = 2.1117
+  Gen  8 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5928 MJ/m | fitness(peor) =  700.5917 MJ/m | sigma = 1.9133
+  Gen  9 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5723 MJ/m | fitness(peor) =  699.9866 MJ/m | sigma = 1.7150
+  Gen 10 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5871 MJ/m | fitness(peor) =  700.4292 MJ/m | sigma = 1.5167
+  Gen 11 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5882 MJ/m | fitness(peor) =  700.4708 MJ/m | sigma = 1.3183
+  Gen 12 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5862 MJ/m | fitness(peor) =  700.5032 MJ/m | sigma = 1.1200
+  Gen 13 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5924 MJ/m | fitness(peor) =  700.5613 MJ/m | sigma = 0.9217
+  Gen 14 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5929 MJ/m | fitness(peor) =  700.5780 MJ/m | sigma = 0.7233
+  Gen 15 | mejor beta =  3.2462° | fitness(mejor) =  700.5934 MJ/m | fitness(prom) =  700.5925 MJ/m | fitness(peor) =  700.5645 MJ/m | sigma = 0.5250
+
+  >>> RESULTADO AG MEJORADO: beta optimo = 3.2462 grados  | energia anual (precision completa) = 700.07 MJ/m
+
+----------------------------------------------------------------------------------------------------
+C) VERIFICACION POR BARRIDO EXHAUSTIVO (fuerza bruta, paso=0.05 grados)
+   sobre el modelo matematico implementado en este trabajo:
+   beta optimo (barrido) = 3.2500 grados  |  energia anual = 700.07 MJ/m
+
+----------------------------------------------------------------------------------------------------
+D) COMPARACION CONTRA LA TESIS (Tabla 7-12, fila B=80mm)
+----------------------------------------------------------------------------------------------------
+   Beta optimo reportado en la tesis       : 3.99 grados  (energia anual tesis: 725.11 MJ/m)
+   Beta optimo AG ORIGINAL (este trabajo)   : 3.25 grados  (diferencia = -0.74 grados)
+   Beta optimo AG MEJORADO (este trabajo)   : 3.25 grados  (diferencia = -0.74 grados)
+   Nota: la energia anual absoluta difiere de la tesis porque el modelo
+   matematico fue reimplementado desde cero a partir de las ecuaciones
+   descritas en el documento (sin acceso al codigo fuente original del
+   autor). Sin embargo, el ANGULO OPTIMO (variable que busca el AG)
+   muestra concordancia cercana, validando que la forma de la funcion
+   objetivo (unimodal, con maximo en la region reportada) fue replicada
+   correctamente.
+
+   Tiempo de computo para esta ciudad: 37.4 s
+

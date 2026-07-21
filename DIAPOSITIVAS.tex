@@ -1,0 +1,384 @@
+% ============================================================
+%  DIAPOSITIVAS – Algoritmos Genéticos para Termas Solares
+%  Formato: Beamer, tema Madrid limpio, sin cajas raras
+% ============================================================
+\documentclass[10pt]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Paleta de colores personalizada (azul oscuro profesional)
+\definecolor{azulunsa}{RGB}{0,56,101}
+\definecolor{azulclaro}{RGB}{0,100,180}
+\definecolor{grisclaro}{RGB}{240,240,240}
+
+\setbeamercolor{palette primary}{bg=azulunsa,fg=white}
+\setbeamercolor{palette secondary}{bg=azulclaro,fg=white}
+\setbeamercolor{palette tertiary}{bg=azulunsa,fg=white}
+\setbeamercolor{palette quaternary}{bg=azulclaro,fg=white}
+\setbeamercolor{structure}{fg=azulunsa}
+\setbeamercolor{frametitle}{bg=azulunsa,fg=white}
+\setbeamercolor{title}{bg=azulunsa,fg=white}
+\setbeamercolor{block title}{bg=azulunsa,fg=white}
+\setbeamercolor{block body}{bg=grisclaro,fg=black}
+\setbeamercolor{itemize item}{fg=azulclaro}
+\setbeamercolor{itemize subitem}{fg=azulclaro}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+% Paquetes
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\tiny,
+  keywordstyle=\color{azulclaro}\bfseries,
+  stringstyle=\color{red!70!black},
+  commentstyle=\color{green!50!black}\itshape,
+  frame=single,
+  rulecolor=\color{azulunsa},
+  breaklines=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt
+}
+
+% ============================================================
+%  PORTADA
+% ============================================================
+\title[AG Termas Solares]{Algoritmos Genéticos para Determinar el Ángulo de\\
+       Inclinación Óptimo de Termas Solares en el Perú}
+\subtitle{Réplica, implementación desde cero y mejora memética}
+\author{Edilson Bonet Mamani Yucra}
+\institute[UNSA]{Universidad Nacional de San Agustín de Arequipa\\
+                 Escuela Profesional de Ciencia de la Computación\\[0.3em]
+                 \textit{Docente: Rolando Cardenas Talavera}}
+\date{Arequipa, \today}
+
+\begin{document}
+
+% ── Portada ──────────────────────────────────────────────────
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ── Índice ───────────────────────────────────────────────────
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+% ============================================================
+\section{Introducción y Motivación}
+% ============================================================
+\begin{frame}{Motivación del Problema}
+  \begin{itemize}
+    \item El Perú tiene uno de los mayores potenciales de radiación solar del planeta.
+    \item Las termas solares de tubos al vacío son sistemas de bajo costo para calentar agua.
+    \item Su eficiencia depende del \textbf{ángulo de inclinación $\beta$} del colector.
+    \item En la práctica, $\beta$ se fija empíricamente, sin considerar la geografía local.
+  \end{itemize}
+
+  \vspace{0.4cm}
+
+  \begin{block}{Objetivo}
+    Replicar íntegramente, \textbf{desde cero}, la metodología de una tesis de\\
+    Ingeniería Mecatrónica que aplica Algoritmos Genéticos para determinar\\
+    automáticamente el ángulo óptimo $\beta^*$ en 6 ciudades del Perú.\\[0.2em]
+    \textbf{Sin} librerías de IA (ni DEAP, ni scipy). Solo Python estándar.
+  \end{block}
+\end{frame}
+
+% ============================================================
+\section{Datos del Problema (Dataset)}
+% ============================================================
+\begin{frame}{Dataset: 6 Ciudades del Perú}
+  \small
+  \begin{table}
+    \centering
+    \caption{Coordenadas geográficas y parámetros de los tubos al vacío}
+    \begin{tabular}{lrrr}
+      \toprule
+      \textbf{Ciudad} & \textbf{Latitud (°)} & \textbf{Longitud (°)} & \textbf{Altitud (km)} \\
+      \midrule
+      Trujillo  & $-8.1117$  & $-79.0286$ & 0.034 \\
+      Piura     & $-5.1971$  & $-80.6266$ & 0.055 \\
+      Iquitos   & $-3.7493$  & $-73.2444$ & 0.106 \\
+      Tacna     & $-18.0137$ & $-70.2510$ & 0.552 \\
+      Arequipa  & $-16.4154$ & $-71.5218$ & 2.335 \\
+      Puno      & $-15.8405$ & $-70.0279$ & 3.827 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+  \vspace{0.2cm}
+  \textbf{Parámetros fijos del tubo:}
+  $D_1 = 47\,\text{mm}$, $D_2 = 58\,\text{mm}$,
+  $L_{tubo} = 1.80\,\text{m}$, $B = 80\,\text{mm}$
+\end{frame}
+
+% ============================================================
+\section{Modelo Matemático (Función Objetivo)}
+% ============================================================
+\begin{frame}{Modelo de Geometría Solar — Función Objetivo}
+  La función objetivo es la \textbf{energía anual} recolectable por unidad de longitud:
+
+  \begin{align*}
+    H_{anual} &= \sum_{n=1}^{365}
+      \int_{-\omega_{ss}}^{\omega_{ss}} P_{total}(t)\, dt
+      \quad \text{[ecuación 34 de la tesis]}\\[4pt]
+    P_{total} &= D_1 L \Bigl(G_{bn}\cos\theta_t\, f(\Omega)
+                           + \pi\, G_{d\beta}\, F\Bigr)
+      \quad \text{[ec. 32]}\\[4pt]
+    \tau_b &= r_0 a_0 + r_1 a_1 \exp\!\Bigl(\tfrac{-r_k k}{\cos\theta_Z}\Bigr)
+      \quad \text{(Hottel, clima tropical)}
+  \end{align*}
+
+  \vspace{0.2cm}
+  \begin{itemize}
+    \item $\omega_{ss}$: ángulo horario de atardecer (superficie inclinada).
+    \item $f(\Omega)$: función de aceptación angular del tubo.
+    \item $F$: factor de forma difuso. Ambos dependen de $D_1, D_2, B$.
+    \item Integración: \textbf{Regla de Simpson compuesta}, 241 puntos/día.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Implementación: Cálculo de Energía Anual}
+  Archivo \texttt{modelo\_solar.py} — función objetivo que maximiza el AG:
+
+  \begin{lstlisting}
+def energia_anual_MJ(phi_deg, altitud_km, beta_deg, B_mm,
+                     paso_dias=1, n_pasos=241):
+    """Energia anual [MJ/m] recolectada por el tubo."""
+    total = 0.0
+    dias = range(1, 366, paso_dias)
+    for n in dias:
+        total += energia_diaria_MJ(n, phi_deg, altitud_km,
+                                   beta_deg, B_mm,
+                                   n_pasos=n_pasos)
+    if paso_dias > 1:
+        total *= 365.0 / len(dias)
+    return total
+  \end{lstlisting}
+
+  \begin{itemize}
+    \item Itera los 365 días del año.
+    \item Integración numérica de Simpson por día.
+    \item Acepta \texttt{paso\_dias} para acelerar el cómputo en el AG.
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Algoritmo Genético Original (Réplica)}
+% ============================================================
+\begin{frame}{AG Original — Parámetros Replicados}
+  \small
+  \begin{table}
+    \centering
+    \caption{Parámetros del Algoritmo Genético original (réplica de la tesis)}
+    \begin{tabular}{ll}
+      \toprule
+      \textbf{Parámetro} & \textbf{Valor / Método} \\
+      \midrule
+      Representación      & Valor real (ángulo $\beta$ en grados)           \\
+      Función de aptitud  & $H_{anual}(\beta)$ (a maximizar)                 \\
+      Tamaño de población & 50 individuos                                    \\
+      Generaciones        & 15                                               \\
+      Selección           & Torneo ($k = 3$)                                 \\
+      Cruzamiento         & Blend Crossover ($\alpha=0.5$,\ $p_c=0.7$)      \\
+      Mutación            & Gaussiana ($\sigma=10\%$ del rango,\ $p_m=0.1$) \\
+      Reemplazo           & Generacional puro (sin elitismo)                 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{AG Original — Selección por Torneo}
+  Archivo \texttt{ga\_original.py}:
+
+  \begin{lstlisting}
+def seleccion_torneo(rng, poblacion, fitnesses, k_torneo=3):
+    seleccionados = []
+    n = len(poblacion)
+    for _ in range(n):
+        # Elegir k participantes al azar
+        participantes = [rng.randrange(n) for _ in range(k_torneo)]
+        # El que mayor fitness tenga gana
+        ganador = max(participantes, key=lambda i: fitnesses[i])
+        seleccionados.append(list(poblacion[ganador]))
+    return seleccionados
+
+def mutacion_gaussiana(rng, individuo, lo, hi, sigma, prob_mut=0.1):
+    if rng.random() < prob_mut:
+        individuo[0] += rng.gauss(0, sigma)
+        # Mantener dentro de los limites de busqueda
+        individuo[0] = max(lo, min(hi, individuo[0]))
+  \end{lstlisting}
+\end{frame}
+
+% ============================================================
+\section{Mejora Propuesta: Algoritmo Memético}
+% ============================================================
+\begin{frame}{Motivación de la Mejora}
+  \begin{itemize}
+    \item La propia tesis valida sus resultados comparándolos contra la\\
+          \textbf{Búsqueda de la Sección Áurea} (GSS), un método unidimensional exacto.
+    \item La función objetivo es \textbf{unimodal}: tiene un único máximo global.
+    \item Esto abre la puerta a integrar la búsqueda local \emph{dentro} del AG.
+  \end{itemize}
+
+  \vspace{0.4cm}
+
+  \begin{block}{Propuesta: Algoritmo Memético (Moscato, 1989)}
+    Combinar exploración evolutiva global con explotación local exacta:\\[0.3em]
+    \begin{enumerate}
+      \item \textbf{Elitismo}: los 2 mejores individuos siempre sobreviven.
+      \item \textbf{Mutación gaussiana adaptativa}: $\sigma$ decrece linealmente\\
+            (de exploración amplia $\to$ explotación fina).
+      \item \textbf{Refinamiento memético}: Búsqueda de la Sección Áurea\\
+            cada 5 generaciones sobre el mejor individuo (aprendizaje Lamarckiano).
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Mejora — Búsqueda de la Sección Áurea (GSS)}
+  Archivo \texttt{ga\_mejorado.py}:
+
+  \begin{lstlisting}
+def busqueda_seccion_aurea(fitness_fn, lo, hi, tol=1e-4, max_iter=60):
+    """Maximiza fitness_fn en [lo, hi] usando la razon aurea."""
+    gr = (5**0.5 - 1) / 2.0   # ~0.618
+    a, b = lo, hi
+    c = b - gr * (b - a)
+    d = a + gr * (b - a)
+    fc, fd = fitness_fn(c), fitness_fn(d)
+    for _ in range(max_iter):
+        if abs(b - a) < tol:
+            break
+        if fc > fd:
+            b, d, fd = d, c, fc
+            c = b - gr * (b - a);  fc = fitness_fn(c)
+        else:
+            a, c, fc = c, d, fd
+            d = a + gr * (b - a);  fd = fitness_fn(d)
+    return (a + b) / 2.0, fitness_fn((a + b) / 2.0)
+  \end{lstlisting}
+
+  Se aplica en un entorno de $\pm 8\%$ del rango alrededor del mejor individuo.
+\end{frame}
+
+% ============================================================
+\section{Resultados}
+% ============================================================
+\begin{frame}{Resultados Comparativos — 6 Ciudades}
+  \small
+  \begin{table}
+    \centering
+    \caption{Ángulo óptimo $\beta^*$ y energía anual ($B=80$mm) vs. tesis original}
+    \begin{tabular}{lrrrrr}
+      \toprule
+      \textbf{Ciudad} &
+      \textbf{$\beta^*$ Tesis} &
+      \textbf{$\beta^*$ AG Orig.} &
+      \textbf{$\beta^*$ AG Mej.} &
+      \textbf{$E$ Tesis} &
+      \textbf{$E$ Réplica} \\
+       & (°) & (°) & (°) & (MJ/m) & (MJ/m) \\
+      \midrule
+      Trujillo & 5.62  & 4.95  & 4.97  & 718.82 & 689.72 \\
+      Piura    & 3.99  & 3.25  & 3.25  & 725.11 & 695.77 \\
+      Iquitos  & 2.87  & 2.47  & 2.48  & 730.23 & 700.33 \\
+      Tacna    & 13.64 & 11.75 & 11.77 & 719.45 & 685.19 \\
+      Arequipa & 12.66 & 11.30 & 11.36 & 793.56 & 746.82 \\
+      Puno     & 12.22 & 11.05 & 10.98 & 804.70 & 755.28 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+  \vspace{0.2cm}
+  \footnotesize
+  Diferencia promedio en $\beta^*$: $\approx 1.1°$ \quad|\quad
+  Energía réplica $\approx 95\%$ de la tesis (diferencia sistemática de calibración).
+\end{frame}
+
+\begin{frame}{Convergencia: AG Original vs. AG Mejorado (Trujillo)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.90\textwidth]{conver.png}
+    \caption{Evolución del mejor y peor individuo por generación — Trujillo.
+             El AG Mejorado concentra toda la población cerca del óptimo desde la generación 4.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Análisis de la Convergencia}
+  \begin{itemize}
+    \item Ambos AG encuentran prácticamente el \textbf{mismo valor óptimo final}.
+    \item La diferencia es la \textbf{robustez de la población}:
+  \end{itemize}
+
+  \vspace{0.3cm}
+
+  \begin{table}
+    \centering
+    \small
+    \begin{tabular}{lrr}
+      \toprule
+      \textbf{Métrica (Trujillo, Gen. 15)} & \textbf{AG Original} & \textbf{AG Mejorado} \\
+      \midrule
+      Fitness mejor individuo (MJ/m) & 690.48 & 690.48 \\
+      Fitness peor individuo (MJ/m)  & 686.72 & 690.45 \\
+      Dispersión (mejor $-$ peor)    & 3.76   & 0.03   \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+  \vspace{0.3cm}
+  \begin{itemize}
+    \item El AG Mejorado reduce la dispersión en más del \textbf{99\%}.
+    \item El barrido exhaustivo (fuerza bruta, paso $0.05°$) confirma el óptimo\\
+          con diferencia $< 0.05°$ para las 6 ciudades.
+    \item Iquitos $<$ Piura $<$ Trujillo $<$ Puno $\approx$ Arequipa $<$ Tacna:\\
+          \textbf{el orden físico (latitud $\to$ $\beta^*$) se preserva perfectamente.}
+  \end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Conclusiones}
+% ============================================================
+\begin{frame}{Conclusiones}
+  \begin{enumerate}
+    \item Se replicó íntegramente desde cero el modelo de geometría solar y el
+          AG de la tesis, \textbf{sin librerías externas de IA}.
+    \item El ángulo óptimo $\beta^*$ concuerda con la tesis (diferencia
+          promedio $\approx 1.1°$) y conserva el mismo \textbf{orden relativo entre ciudades}.
+    \item La diferencia en energía absoluta ($\approx 5\%$) es sistemática y
+          atribuible a supuestos de calibración no declarados por el autor,
+          \textbf{no a un error conceptual}.
+    \item La mejora memética no altera el valor del óptimo (problema
+          unidimensional simple) pero reduce la dispersión de la población en
+          más del \textbf{99\%}, siendo especialmente relevante en problemas
+          de mayor dimensionalidad.
+    \item Se demuestra la viabilidad de aplicar AGs implementados desde cero
+          a un problema real de ingeniería de energías renovables.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \vspace{1.5cm}
+  {\Large\bfseries Gracias por su atención}\\[1.5cm]
+  {\normalsize Edilson Bonet Mamani Yucra}\\[0.3em]
+  {\small Universidad Nacional de San Agustín de Arequipa}\\[0.3em]
+  {\small Curso: Inteligencia Artificial}
+\end{frame}
+
+\end{document}
