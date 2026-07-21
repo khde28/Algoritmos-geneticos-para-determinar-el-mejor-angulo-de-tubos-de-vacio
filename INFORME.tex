@@ -1,0 +1,480 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------------------------
+% Paquetes
+% ---------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.2cm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{listings}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green!50!black},
+  frame=single,
+  breaklines=true,
+  showstringspaces=false
+}
+
+\titlespacing*{\section}{0pt}{10pt}{6pt}
+\titlespacing*{\subsection}{0pt}{8pt}{4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small Algoritmos genéticos para termas solares en Perú}
+\lhead{\small Trabajo Final de Curso}
+\cfoot{\thepage}
+
+\setlength{\parindent}{0pt}
+
+
+\begin{document}
+
+% 
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    {\Large\bfseries Universidad Nacional de San Agustín de Arequipa\\[0.3em]
+    Escuela Profesional de Ciencia de la Computación\\[0.5em]}
+    {\Large Curso: Inteligencia Artificial\\[2cm]}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.2\textwidth]{logo_unsa.png} % ESPACIO PARA LOGO
+        \label{fig:logo}
+    \end{figure}
+    \rule{\linewidth}{0.5pt}\\[0.5em]
+    {\LARGE\bfseries Réplica basada en la tesis de Ingeniería Mecatrónica\\[0.3em]}
+    {\Large Algoritmos Genéticos para Determinar los Ángulos de Inclinación\\
+Óptimos de Tubos al Vacío de Termas Solares en las\\
+Principales Ciudades del Perú \\[0.5em]}
+    {\Large\bfseries Presentado por:\par}
+        {\Large Mamani Yucra Edilson Bonet\par}
+    {\Large\bfseries Docente:\par}
+        {\Large Rolando Cardenas Talavera\par}
+    \rule{\linewidth}{0.5pt}\\[3cm]
+    {\large Arequipa, \today}
+    \vfill
+\end{titlepage}
+
+\section{Introducción}
+% =============================================================================
+
+El Perú es uno de los países con mayor potencial de radiación solar del planeta,
+alcanzando niveles de insolación extremadamente altos en gran parte de su
+territorio. Este recurso es aprovechado ampliamente por las termas solares de
+tubos al vacío, sistemas de bajo costo utilizados para el calentamiento
+doméstico de agua. Sin embargo, la eficiencia de estos sistemas depende
+críticamente del ángulo de inclinación con el que se instalan los colectores,
+un parámetro que suele fijarse de manera empírica o siguiendo recomendaciones
+genéricas del fabricante, sin considerar las particularidades geográficas de
+cada ciudad (latitud, altitud y perfil de radiación anual).
+
+La tesis de referencia, desarrollada en el área de Ingeniería Mecatrónica,
+aborda este problema aplicando \textbf{Algoritmos Genéticos (AG)} —una técnica
+de Inteligencia Artificial bio-inspirada en la selección natural— para
+determinar de forma automática el ángulo de inclinación que maximiza la
+energía solar anual recolectada por un tubo al vacío, en seis de las
+principales ciudades del Perú: Trujillo, Piura, Iquitos, Tacna, Arequipa y
+Puno.
+
+El presente trabajo tiene como objetivo replicar íntegramente esta
+metodología \textbf{desde cero}, sin el uso de ninguna librería de
+Inteligencia Artificial u optimización (ni DEAP, ni \texttt{scipy}, ni
+similares), implementando manualmente tanto el modelo matemático de geometría
+solar que define la función objetivo, como el propio Algoritmo Genético con
+sus operadores de selección, cruzamiento y mutación. Adicionalmente, se
+propone e implementa una \textbf{mejora} justificada al algoritmo original,
+convirtiéndolo en un algoritmo memético, y se comparan los resultados
+obtenidos contra los reportados por el autor de la tesis.
+
+% =============================================================================
+\section{Descripción del problema real resuelto}
+% =============================================================================
+
+El problema real consiste en \textbf{maximizar la energía solar anual
+recolectable por unidad de longitud de un tubo al vacío}, variando su único
+parámetro de diseño libre: el ángulo de inclinación $\beta$ (en grados).
+
+Un tubo al vacío recibe radiación solar directa y difusa a lo largo del año.
+La cantidad de energía captada depende de una geometría solar compleja que
+involucra:
+
+\begin{itemize}[nosep]
+  \item La posición del sol en cada instante del día y del año (declinación,
+        ángulo horario, ángulo cenital).
+  \item La atenuación atmosférica de la radiación (modelo de cielo despejado
+        de Hottel).
+  \item El sombreado mutuo entre tubos adyacentes, que depende del ángulo de
+        inclinación $\beta$, el diámetro de los tubos ($D_1=47$mm interior,
+        $D_2=58$mm cobertor) y la distancia de separación entre sus centros
+        ($B$).
+\end{itemize}
+
+Existe una relación no lineal y no monótona entre $\beta$ y la energía anual
+recolectada: ángulos muy bajos maximizan la captación al mediodía pero
+desaprovechan la radiación de mañana/tarde; ángulos muy altos reducen el
+área efectiva de captación y aumentan el autosombreado. Esto genera una
+función objetivo \textbf{unimodal} (un único máximo) en el rango de interés,
+razón por la cual el problema es un candidato natural —y a la vez
+relativamente sencillo, al tratarse de una sola variable de decisión
+continua— para ser resuelto mediante optimización evolutiva.
+
+La función objetivo replicada corresponde a la ecuación (34) de la tesis:
+la \textbf{energía anual acumulada} $H_{anual}$, obtenida sumando, para los
+365 días del año, la integral diaria de la potencia total (directa + difusa)
+incidente sobre el tubo, entre la hora del amanecer y la del atardecer.
+
+Se replicaron los datos geográficos exactos (latitud, longitud y altitud,
+tomados en la plaza de armas) de las seis ciudades analizadas en la tesis,
+así como la geometría de los tubos ($D_1=47$mm, $D_2=58$mm, $B=80$mm, valor
+típico usado por la tesis).
+
+\begin{table}[H]
+\centering
+\small
+\caption{Dataset de coordenadas geográficas y parámetros de los tubos al vacío.}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Ciudad} & \textbf{Latitud (°)} & \textbf{Longitud (°)} & \textbf{Altitud (km)} \\
+\midrule
+Trujillo & -8.1117 & -79.0286 & 0.034 \\
+Tacna & -18.0137 & -70.2510 & 0.552 \\
+Arequipa & -16.4154 & -71.5218 & 2.335 \\
+Piura & -5.1971 & -80.6266 & 0.055 \\
+Puno & -15.8405 & -70.0279 & 3.827 \\
+Iquitos & -3.7493 & -73.2444 & 0.106 \\
+\bottomrule
+\multicolumn{4}{l}{\textbf{Parámetros fijos del tubo al vacío:}} \\
+\multicolumn{4}{l}{Diámetro interno ($D_1$) = 47 mm, Diámetro externo ($D_2$) = 58 mm} \\
+\multicolumn{4}{l}{Longitud ($L_{tubo}$) = 1.80 m, Separación entre centros ($B$) = 80 mm} \\
+\end{tabular}
+\end{table}
+
+% =============================================================================
+\section{Explicación del algoritmo original (de la tesis)}
+% =============================================================================
+
+\subsection{Función objetivo y modelo matemático}
+
+El modelo matemático de geometría solar se implementó desde cero (usando
+únicamente el módulo estándar \texttt{math} de Python), reproduciendo con
+fidelidad las ecuaciones descritas en la tesis, basadas en Duffie, Beckman \&
+Blair (2020) y en Tang, Gao \& Yu (2009):
+
+\begin{align}
+\delta &= \text{declinación solar (polinomio de Spencer, 1971)}\\
+\omega_{ss} &= \min\!\Big(\omega_s,\ \cos^{-1}\!\big(-\tan\delta\tan(\phi+\beta)\big)\Big)
+  \quad \text{(atardecer, plano inclinado, hemisferio sur)}\\
+\tau_b &= r_0 a_0 + r_1 a_1 \exp\!\Big(\dfrac{-r_k k}{\cos\theta_Z}\Big)
+  \quad \text{(transmitancia directa, modelo de Hottel)}\\
+G_{bn} &= G_{on}\cos\theta_Z\,\tau_b \, ,\quad
+   \tau_d = 0.271-0.294\tau_b \, ,\quad G_d = G_{on}\cos\theta_Z\,\tau_d\\
+P_{total} &= D_1 L_{tubo}\Big(G_{bn}\cos\theta_t\, f(\Omega) + \pi\, G_{d\beta}\, F\Big)
+  \quad \text{(ecuación 32 de la tesis)}\\
+H_{anual} &= \sum_{n=1}^{365}\int_{-\omega_{ss}}^{\omega_{ss}} P_{total}(t)\, dt
+  \quad \text{(ecuación 34 de la tesis, función objetivo)}
+\end{align}
+
+donde $f(\Omega)$ es la función de aceptación angular y $F$ el factor de
+forma difuso, ambos dependientes de los ángulos críticos $\Omega_0,\Omega_1$
+determinados por la geometría de los tubos (ecuaciones 25-31 de la tesis).
+La integral diaria se evaluó numéricamente mediante la \textbf{regla de
+Simpson compuesta}, implementada también desde cero. A continuación se
+muestra la función principal en Python que calcula la energía anual iterando
+sobre los 365 días del año:
+
+\begin{lstlisting}
+def energia_anual_MJ(phi_deg, altitud_km, beta_deg, B_mm, paso_dias=1, n_pasos=241):
+    total = 0.0
+    dias = range(1, 366, paso_dias)
+    for n in dias:
+        total += energia_diaria_MJ(n, phi_deg, altitud_km, beta_deg, B_mm, n_pasos=n_pasos)
+    if paso_dias > 1:
+        total *= 365.0 / len(dias)
+    return total
+\end{lstlisting}
+
+\subsection{Representación y operadores del Algoritmo Genético}
+
+Siguiendo la sección 3.4.2 de la tesis (que reporta el uso de la librería
+DEAP), se implementó un AG con las siguientes características, replicadas
+manualmente en Python puro (módulo \texttt{random} únicamente):
+
+\begin{table}[H]
+\centering
+\small
+\caption{Parámetros configurados para el Algoritmo Genético original.}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parámetro} & \textbf{Valor / Método} \\
+\midrule
+Representación & Valor real (ángulo $\beta$ en grados) \\
+Función de aptitud & Energía anual $H_{anual}(\beta)$ (a maximizar) \\
+Tamaño de población & 50 individuos \\
+Número de generaciones & 15 \\
+Método de selección & Torneo (tamaño $k=3$) \\
+Método de cruzamiento & Blend Crossover ($\alpha=0.5$), probabilidad $p_c=0.7$ \\
+Método de mutación & Gaussiana ($\sigma=10\%$), probabilidad $p_m=0.1$ \\
+Reemplazo & Generacional puro (sin elitismo) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El rango de búsqueda de $\beta$ se acotó, para cada ciudad, según la región
+donde la propia tesis (Tablas 5 y 6) reportó la mayor energía anual mediante
+el barrido inicial de ángulos (0°-35°). El siguiente código muestra cómo se
+implementó la selección por torneo y la mutación en el algoritmo puro:
+
+\begin{lstlisting}
+def seleccion_torneo(poblacion, k=3):
+    seleccionados = []
+    for _ in range(len(poblacion)):
+        torneo = random.sample(poblacion, k)
+        ganador = max(torneo, key=lambda ind: ind["fitness"])
+        seleccionados.append(ganador.copy())
+    return seleccionados
+
+def mutacion_gaussiana(ind, lo, hi, sigma, prob_mut=0.1):
+    if random.random() < prob_mut:
+        ind["beta"] += random.gauss(0, sigma)
+        # Asegurar que no exceda los limites
+        ind["beta"] = max(lo, min(hi, ind["beta"]))
+\end{lstlisting}
+
+% =============================================================================
+\section{Explicación de la mejora implementada}
+% =============================================================================
+
+\subsection{Motivación}
+
+El propio autor de la tesis, en la sección 3.4.4 (``Evaluación de
+Resultados''), valida sus resultados del AG comparándolos contra un método
+numérico clásico: la \textbf{Búsqueda de la Sección Áurea}
+(\emph{Golden Section Search}), un método de optimización unidimensional que
+converge de forma muy precisa cuando la función es unimodal en el intervalo
+de búsqueda —exactamente el caso de este problema—. Esto sugiere una mejora
+natural: en lugar de usar la búsqueda áurea solo como verificación externa
+posterior, \textbf{integrarla dentro del propio ciclo evolutivo}, dando
+lugar a un \textbf{Algoritmo Memético} (Moscato, 1989): la combinación de un
+algoritmo evolutivo (exploración global) con una búsqueda local exacta
+(explotación fina).
+
+Adicionalmente, se identificó una debilidad metodológica en el AG original:
+al usar reemplazo generacional puro (sin elitismo), el mejor individuo
+encontrado en una generación \textbf{puede perderse} si no sobrevive la
+selección, el cruce o la mutación de la siguiente generación —un problema
+conocido de los AG generacionales simples.
+
+\subsection{Componentes de la mejora propuesta}
+
+\begin{enumerate}[nosep]
+  \item \textbf{Elitismo}: se conservan siempre los 2 mejores individuos de
+        cada generación, reinsertándolos en el lugar de los 2 peores
+        individuos de la descendencia. Esto garantiza una convergencia
+        \textbf{monótona no decreciente} del mejor fitness.
+  \item \textbf{Mutación gaussiana adaptativa}: la desviación estándar
+        $\sigma$ de la mutación decrece linealmente a lo largo de las
+        generaciones (de $\sigma_{inicial}=10\%$ del rango a
+        $\sigma_{final}=1.5\%$), pasando de una fase de exploración amplia a
+        una fase de explotación fina, en lugar de mantener una $\sigma$ fija
+        durante las 15 generaciones.
+  \item \textbf{Refinamiento memético (Lamarckiano)}: cada 5 generaciones, se
+        aplica la Búsqueda de la Sección Áurea en un entorno pequeño
+        ($\pm 8\%$ del rango total) alrededor del mejor individuo de la
+        población, y si el resultado refinado mejora el fitness, reemplaza
+        directamente al individuo en la población (aprendizaje
+        Lamarckiano).
+\end{enumerate}
+
+Esta combinación es un enfoque estándar y ampliamente documentado en la
+literatura de optimización evolutiva para problemas continuos de baja
+dimensionalidad, y tiene la ventaja adicional de ser \emph{coherente} con la
+propia validación metodológica que el autor de la tesis ya realizó.
+
+% =============================================================================
+\section{Resultados obtenidos}
+% =============================================================================
+
+Ambos algoritmos (original y mejorado) fueron ejecutados con los mismos
+parámetros (población=50, generaciones=15, $p_c=0.7$, $p_m=0.1$) y la misma
+semilla aleatoria, para las 6 ciudades de la tesis. El detalle generación
+por generación de cada ejecución (fitness del mejor, promedio y peor
+individuo por generación) se documenta en el archivo de salida
+\texttt{resultados\_algoritmo\_genetico.txt} adjunto al presente informe.
+
+\subsection{Tabla comparativa de ángulos óptimos}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Ángulo óptimo $\beta^*$ (grados) y energía anual (MJ/m) para $B=80$mm,
+comparado contra la tesis original.}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Ciudad} & \textbf{$\beta^*$ Tesis} & \textbf{$\beta^*$ AG Original} & \textbf{$\beta^*$ AG Mejorado} & \textbf{Energía Tesis} & \textbf{Energía (este trabajo)}\\
+ & (°) & (°) & (°) & (MJ/m) & (MJ/m)\\
+\midrule
+Trujillo  & 5.62  & 4.95  & 4.97  & 718.82 & 689.72 \\
+Piura     & 3.99  & 3.25  & 3.25  & 725.11 & 695.77 \\
+Iquitos   & 2.87  & 2.47  & 2.48  & 730.23 & 700.33 \\
+Tacna     & 13.64 & 11.75 & 11.77 & 719.45 & 685.19 \\
+Arequipa  & 12.66 & 11.30 & 11.36 & 793.56 & 746.82 \\
+Puno      & 12.22 & 11.05 & 10.98 & 804.70 & 755.28 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Concordancia de ángulos:} la diferencia absoluta promedio entre el
+ángulo óptimo hallado por el AG (ambas versiones) y el reportado por la
+tesis es de aproximadamente $1.1°$, con la ciudad de Iquitos mostrando la
+mayor cercanía ($-0.40°$) y Tacna la mayor discrepancia ($-1.89°$). En las 6
+ciudades se conserva el mismo orden relativo de los ángulos óptimos
+(Iquitos $<$ Piura $<$ Trujillo $<$ Puno $\approx$ Arequipa $<$ Tacna), lo
+cual confirma que el modelo matemático reimplementado captura correctamente
+la tendencia física esperada: ciudades de mayor latitud requieren mayor
+inclinación.
+
+\textbf{Concordancia de energía:} la energía anual obtenida en este trabajo
+es sistemáticamente entre un 94\% y un 96\% de la reportada en la tesis
+(razón promedio $\approx 0.95$) para las 6 ciudades. Esta diferencia
+proporcional y consistente es esperable, dado que el modelo se reimplementó
+desde cero a partir de las ecuaciones del documento, sin acceso al código
+fuente original ni a los supuestos de calibración numérica no explicitados
+por el autor (p.ej. resolución exacta de la integración numérica, manejo de
+casos límite del sombreado). El hecho de que la razón sea consistente entre
+las 6 ciudades (no aleatoria) sugiere una diferencia sistemática de
+calibración más que un error conceptual del modelo.
+
+\subsection{Comparación de convergencia: AG Original vs. AG Mejorado}
+
+La Figura \ref{fig:convergencia} muestra la evolución del mejor y el peor
+individuo de la población, generación a generación, para la ciudad de
+Trujillo (resultado representativo de las 6 ciudades).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{conver.png}
+\caption{Convergencia del AG Original vs. AG Mejorado (Trujillo). El AG
+Mejorado mantiene una población mucho más homogénea (peor individuo mucho
+más cercano al mejor) gracias al elitismo y la mutación adaptativa.}
+\label{fig:convergencia}
+\end{figure}
+
+Ambos algoritmos alcanzan prácticamente el mismo valor de fitness máximo (la
+diferencia entre el mejor individuo de ambos en la generación 15 es menor a
+$0.001\%$), lo cual es esperable dado que el problema es unidimensional y
+unimodal —relativamente sencillo para cualquier AG bien configurado—. La
+diferencia relevante aparece en la \textbf{robustez de la convergencia de
+toda la población}: en el AG Original, el peor individuo de la generación 15
+todavía se encuentra a $3.82$ MJ/m del mejor (fitness peor $=687.10$ vs.
+mejor $=690.92$), evidenciando que, sin elitismo, una fracción de la
+población puede seguir siendo subóptima incluso al final de la ejecución.
+En el AG Mejorado, esa misma brecha se reduce a apenas $0.02$ MJ/m
+(peor$=690.90$ vs. mejor$=690.92$), es decir, una reducción de más del
+\textbf{99\%} en la dispersión final de la población. Este comportamiento se
+repitió de forma consistente en las 6 ciudades evaluadas.
+
+\subsection{Verificación cruzada}
+
+Como verificación adicional (análoga a la que realiza la propia tesis en su
+sección 3.4.4), se ejecutó un \textbf{barrido exhaustivo} (fuerza bruta,
+paso de $0.05°$) sobre el mismo modelo matemático implementado. En las 6
+ciudades, el óptimo hallado por barrido coincidió con el hallado por ambas
+versiones del AG con una diferencia menor a $0.05°$ (el propio paso de
+discretización del barrido), confirmando que ambos algoritmos genéticos
+convergieron correctamente al máximo global de la función objetivo
+implementada.
+
+% =============================================================================
+\section{Conclusiones}
+% =============================================================================
+
+\begin{enumerate}[nosep]
+  \item Se logró implementar desde cero, sin ninguna librería de
+        Inteligencia Artificial ni de optimización, tanto el modelo
+        matemático de geometría solar (ecuaciones 1-34 de la tesis) como un
+        Algoritmo Genético que replica fielmente la metodología descrita en
+        la sección 3.4.2 (población=50, generaciones=15, cruzamiento=0.7,
+        mutación=0.1).
+  \item El ángulo óptimo de inclinación hallado para las 6 ciudades
+        concuerda de forma cercana con el reportado en la tesis (diferencia
+        promedio $\approx 1.1°$), y conserva exactamente el mismo orden
+        relativo entre ciudades, validando que el problema de optimización
+        (una función unimodal de la energía anual en función de $\beta$) fue
+        replicado correctamente en su estructura esencial.
+  \item La energía anual absoluta calculada difiere de la reportada por el
+        autor en un factor sistemático de aproximadamente 0.95, atribuible a
+        diferencias de calibración numérica no explicitadas en el documento
+        original (y no a un error conceptual, dado que la razón es
+        consistente entre ciudades).
+  \item La mejora propuesta —un \textbf{algoritmo memético} que combina
+        elitismo, mutación gaussiana adaptativa y refinamiento local con
+        Búsqueda de la Sección Áurea— no modificó significativamente el
+        valor final del óptimo (por tratarse de un problema unidimensional
+        relativamente sencillo), pero sí mejoró sustancialmente la
+        \textbf{robustez de la convergencia}, reduciendo en más del 99\% la
+        dispersión de fitness entre el mejor y el peor individuo de la
+        población final.
+  \item Esta mejora es especialmente relevante y generalizable a problemas
+        de mayor dimensionalidad (por ejemplo, si se optimizara
+        simultáneamente el ángulo $\beta$ y la distancia entre tubos $B$),
+        donde el elitismo y el refinamiento local memético previenen la
+        pérdida de buenas soluciones y aceleran la convergencia sin
+        aumentar el número de generaciones.
+  \item El trabajo demuestra la viabilidad de aplicar Algoritmos Genéticos,
+        implementados completamente desde cero, a un problema real de
+        ingeniería mecatrónica/energías renovables, reforzando el carácter
+        interdisciplinario de la Inteligencia Artificial como herramienta de
+        optimización en dominios de ingeniería física.
+\end{enumerate}
+
+% =============================================================================
+\section{Referencias bibliográficas}
+% =============================================================================
+
+\begin{itemize}[nosep]
+  \item Autor de la tesis (2025). \emph{Algoritmos genéticos para determinar
+        los ángulos de inclinación óptimos de tubos al vacío de termas
+        solares en las principales ciudades del Perú}. Tesis de Ingeniería
+        Mecatrónica.
+  \item Beckman, W.A., Duffie, J.A., \& Blair, N. (2020). \emph{Solar
+        Engineering of Thermal Processes, Photovoltaics and Wind} (5ta ed.).
+        Wiley.
+  \item Tang, R., Gao, W., \& Yu, Y. (2009). Optimal tilt-angles of
+        all-glass evacuated tube solar collectors. \emph{Energy}, 34,
+        1387-1395.
+  \item Hottel, H.C. (1976). A simple model for estimating the transmittance
+        of direct solar radiation through clear atmospheres. \emph{Solar
+        Energy}, 18(2), 129-134.
+  \item Liu, B.Y.H., \& Jordan, R.C. (1960). The interrelationship and
+        characteristic distribution of direct, diffuse and total solar
+        radiation. \emph{Solar Energy}, 4(3), 1-19.
+  \item Spencer, J.W. (1971). Fourier series representation of the position
+        of the sun. \emph{Search}, 2(5), 172.
+  \item Moscato, P. (1989). \emph{On Evolution, Search, Optimization,
+        Genetic Algorithms and Martial Arts: Towards Memetic Algorithms}.
+        Caltech Concurrent Computation Program, Report 826.
+  \item Fortin, F.A., De Rainville, F.M., Gardner, M.A., Parizeau, M., \&
+        Gagné, C. (2012). DEAP: Evolutionary algorithms made easy.
+        \emph{Journal of Machine Learning Research}, 13(1), 2171-2175.
+\end{itemize}
+
+\end{document}
